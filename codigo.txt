@@ -1,0 +1,140 @@
+
+
+class Tipos{
+public:
+
+    string tipo( int A, int  B, int M , int D){
+        if(B > 0 && ( M >0 || D> 0 || A> 0)){
+            return "Base";
+        }else if(B == 0 &&  M  == 0 && D ==  0 && A > 0){
+            return "Nueva";
+        }else if(B > 0 &&  M  == 0 && D ==  0 && A == 0){
+            return "Reusada";
+        }
+
+    };
+
+
+};
+
+
+class Respuesta{
+
+    public:
+        void resultados(int lCod,int lBlanco, int lCom, int T, int I,int B, int D,int M, int A, string nombre, bool vacio, string base){
+        int total= lCod + lBlanco + lCom;
+        if(total == 0){
+            cout << "Nombre del archivo: " << nombre<< "\n";
+            cout << "--------------------------------------------"<<"\n";
+            cout << "---------------- Archivo inexistente -------------"<< "\n";
+
+        }
+        else if(vacio == true){
+            cout << "Nombre del archivo: " << nombre<< "\n";
+            cout << "--------------------------------------------"<<"\n";
+            cout << "---------------- Archivo vacio -------------"<< "\n";
+
+        }else {
+            cout << "ClaseS " << base << ":\n";
+            cout << '\t'<<nombre << ": " << " T="<< T<< "," << " I="<<I << ","<<" B=" << B << ","<<" D="<< D << ","<< " M="<< M << ","<< " A="<< A <<"\n";
+            cout << "----------------------------------------------------------------------------"<<"\n";
+
+        }
+    }
+
+};
+
+
+struct Vertex{
+    int lCod;
+    int lBlanco;
+    int lCom;
+    int T;
+    int I;
+    int B;
+    int D;
+    int M;
+    int A;
+    string nombre;
+    bool vacio;
+    string base;
+    string nombreSinTerminacion;
+
+};
+
+
+int main ()
+{
+string type;
+string archivo;
+string exit = " ";
+cin >> archivo ;
+string temp = "";
+vector<Vertex> r;
+Respuesta respuesta;
+int unica = 0;
+string baseUnica;
+string nombreSinTerminacion;
+int LCD =0;
+    while( exit != "exit"){
+    nombreSinTerminacion = "";
+
+        ifstream doc(archivo);
+//--------------- extraer nombre sin terminacion
+
+        string f= " ";
+        for(int i = 0 ; i < archivo.size(); i++){
+
+            f = archivo[i];
+            nombreSinTerminacion.append(f);
+
+            if(archivo[i+1] == '.'){
+                break;
+            }
+        }
+
+// ------------ clases
+
+        Contador contador;
+        contador.lector(doc, archivo);
+
+
+        Tipos tipos;
+        type =tipos.tipo(contador.A,contador.b, contador.m, contador.d);
+
+         r.push_back({contador.lBlanco,contador.lCom , contador.lCod,contador.t,contador.item,contador.b,contador.d, contador.m,contador.A, archivo, contador.vacio,type, nombreSinTerminacion});
+
+
+
+        cin >> temp ;
+        if(temp == "exit"){
+            exit = temp;
+        }else{
+            archivo = temp;
+        }
+    }
+LCD = 0;
+        for(int i = 0; i < r.size(); i++){
+
+            if(r[i].nombreSinTerminacion == r[i+1].nombreSinTerminacion && i != r.size() -1){
+                r[i+1].lBlanco += r[i].lBlanco;
+                r[i+1].lCom += r[i].lCom;
+                r[i+1].lCod += r[i].lCod;
+                r[i+1].T += r[i].T;
+                r[i+1].I += r[i].I;
+                r[i+1].B += r[i].B;
+                r[i+1].D += r[i].D;
+                r[i+1].M += r[i].M;
+                r[i+1].A += r[i].A;
+
+
+              
+            }else{
+               respuesta.resultados(r[i].lBlanco ,r[i].lCom , r[i].lCod,r[i].T,r[i].I,r[i].B,r[i].D, r[i].M,r[i].A ,r[i].nombreSinTerminacion, r[i].vacio,r[i].base);
+
+            }
+             LCD = LCD + r[i].T;
+        }
+
+        cout<< "Total de LCD=" << LCD;
+    }
